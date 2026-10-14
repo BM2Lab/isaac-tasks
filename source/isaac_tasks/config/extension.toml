@@ -1,0 +1,15 @@
+[package]
+version = "0.0.1"
+category = "isaaclab"
+title = "Lab Isaac Tasks"
+description = "External manager-based multi-robot task scaffold"
+readme = "README.md"
+keywords = ["isaaclab", "manager-based", "robot-learning"]
+
+[dependencies]
+"isaaclab" = {}
+"isaaclab_assets" = {}
+"isaaclab_tasks" = {}
+
+[[python.module]]
+name = "isaac_tasks"

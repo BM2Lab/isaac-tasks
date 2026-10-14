@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68,<82", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "isaac-tasks"
+version = "0.0.1"
+description = "Lab manager-based Isaac Lab external extension scaffold"
+requires-python = ">=3.12"
+dependencies = ["contracts==0.0.1"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["isaac_tasks*"]
+
+[tool.setuptools.package-data]
+isaac_tasks = ["**/*.yaml", "**/*.toml", "**/*.json"]
+
+[tool.setuptools.data-files]
+"share/isaac-tasks/config" = ["config/extension.toml"]
+"share/isaac-tasks" = ["README.md"]
