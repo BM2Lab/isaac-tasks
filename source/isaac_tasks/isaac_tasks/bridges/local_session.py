@@ -4,6 +4,8 @@ import uuid
 import hashlib
 import importlib.metadata
 import sys
+import inspect
+from pathlib import Path
 
 import torch
 from contracts.actions import ActionChunk
@@ -15,10 +17,11 @@ from isaac_tasks.assets.fr3.visual_reach import MODEL
 
 
 class LocalVisualReachSession:
-    def __init__(self, env, spec, seed=42):
+    def __init__(self, env, spec, seed=42, enable_expert=False):
         if env.num_envs != 1:
             raise ValueError("V2 local sessions support exactly one environment")
         self.env, self.spec = env, spec
+        self.enable_expert = enable_expert
         self.bridge = VisualReachBridge(env, spec)
         self.queue = ActionQueue(spec)
         self.session_id = uuid.uuid4().hex
@@ -46,10 +49,23 @@ class LocalVisualReachSession:
         return self.observe()
 
     def receipt(self):
+        from isaac_tasks.controllers.visual_reach import CartesianIncrementAction, expert_increment
+        from isaac_tasks.tasks.manager_based.reach.mdp.visual_reach import sustained_success
+        sources = {"environment": type(self.env.cfg), "controller_and_expert": CartesianIncrementAction,
+            "target_and_termination_terms": sustained_success}
         return {"session_id": self.session_id, "backend": "simulation",
             "contract_sha256": hashlib.sha256(self.spec.to_json().encode()).hexdigest(),
             "asset": MODEL, "physics_dt_s": self.env.physics_dt, "policy_dt_s": self.env.step_dt,
             "episode_length_s": self.env.cfg.episode_length_s,
+            "expert_demonstrations_enabled": self.enable_expert,
+            "source_sha256": {name: hashlib.sha256(Path(inspect.getfile(obj)).read_bytes()).hexdigest() for name, obj in sources.items()},
+            "task_recipe": {"target_lower_m": self.env.cfg.commands.target.lower,
+                "target_upper_m": self.env.cfg.commands.target.upper,
+                "implicit_pd": {name: {"stiffness": cfg.stiffness, "damping": cfg.damping,
+                    "armature": cfg.armature, "effort_limit_sim": cfg.effort_limit_sim}
+                    for name, cfg in self.env.scene["robot"].cfg.actuators.items()},
+                "expert_position_gain": inspect.signature(expert_increment).parameters["gain"].default,
+                "expert_max_translation_norm_m": self.spec.action.max_translation_norm_m-1e-8},
             "runtime": {"python": sys.version, **{name: importlib.metadata.version(name)
                 for name in ("isaaclab", "isaacsim", "torch", "contracts", "isaac-tasks")}}}
 
@@ -71,6 +87,18 @@ class LocalVisualReachSession:
     def submit(self, chunk):
         self.queue.accept(ActionChunk.from_dict(chunk), self.context)
         return self.status()
+
+    def expert_action(self, expected_context):
+        """Opt-in privileged label generation, never a policy observation feature."""
+        if not self.enable_expert:
+            raise ValueError("Expert demonstrations are disabled for this session")
+        if SampleContext.from_dict(expected_context) != self.context or len(self.queue):
+            raise ValueError("Expert label requires current capture context and an empty queue")
+        from isaac_tasks.controllers.visual_reach import tcp_pose_base, expert_increment
+        row = expert_increment(tcp_pose_base(self.env)[0], self.env.command_manager.get_command("target"),
+            max_norm_m=self.spec.action.max_translation_norm_m-1e-8)[0].cpu().tolist()
+        chunk = ActionChunk(self.context, self.spec.action, (tuple(row),), self.context.timestamp_ns+2*self.period_ns)
+        return {"chunk": chunk.to_dict(), "label_source": "privileged_scripted_ik_expert"}
 
     def advance(self, expected_context):
         if SampleContext.from_dict(expected_context) != self.context:

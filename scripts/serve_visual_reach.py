@@ -15,6 +15,7 @@ parser.add_argument("--seed", type=int, default=42)
 parser.add_argument("--idle-timeout", type=float, default=60)
 parser.add_argument("--max-requests", type=int, default=1000)
 parser.add_argument("--test-episode-length-s", type=float, help="Short timeout override for automatic-reset verification only")
+parser.add_argument("--enable-expert-demonstrations", action="store_true", help="Opt in to privileged scripted-expert label requests (simulation only)")
 add_launcher_args(parser)
 parser.set_defaults(visualizer=[])
 args, hydra_args = setup_preset_cli(parser)
@@ -45,7 +46,7 @@ def main():
         from isaac_tasks.bridges.local_server import serve
         env = gym.make(args.task, cfg=cfg).unwrapped
         try:
-            session = LocalVisualReachSession(env, spec, args.seed)
+            session = LocalVisualReachSession(env, spec, args.seed, args.enable_expert_demonstrations)
             serve(session, args.socket, args.idle_timeout, args.max_requests)
             print("V2 simulation session closed cleanly", flush=True)
             return 0

@@ -62,6 +62,8 @@ def serve(session, socket_path, idle_timeout_s=60, max_requests=1000):
                                 result = session.status()
                             elif op == "submit" and set(payload) == {"chunk"}:
                                 result = session.submit(payload["chunk"])
+                            elif op == "expert_action" and set(payload) == {"context"}:
+                                result = session.expert_action(payload["context"])
                             elif op == "advance" and set(payload) == {"context"}:
                                 result = session.advance(payload["context"])
                             elif op == "close" and not payload:

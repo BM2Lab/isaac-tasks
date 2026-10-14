@@ -28,3 +28,6 @@ FK/joint-map, reset, controller/reference and reward parity against franka-rl.
 
 V2 adds a simulation-only local endpoint with validated action chunks and
 episode-aware reset invalidation. See [V2 simulator endpoint](docs/v2_local_sim.md).
+
+V3 adds an opt-in privileged expert label endpoint; dataset writing/export remains
+in the separate learning process. See [V3 expert endpoint](docs/v3_demonstrations.md).

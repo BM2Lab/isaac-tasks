@@ -65,3 +65,8 @@ exact contract handshaking, episode/capture identity, per-execution expiry check
 reset queue invalidation and private socket lifecycle. Waiting for a client must
 not advance physics. Never import the learning/ML stack to run the endpoint;
 see `docs/v2_local_sim.md` for protocol and verification.
+
+V3's privileged expert label RPC must remain opt-in and tagged separately from
+policy observations. It generates labels only; execution still uses the normal
+validated queue. Dataset buffering/export belongs in learning, never in the
+simulator's stepping loop. See `docs/v3_demonstrations.md`.

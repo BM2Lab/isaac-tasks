@@ -36,3 +36,11 @@ def test_auto_reset_closes_old_episode_and_discards_pending_rows(monkeypatch):
     assert packet.context.step_index == 0
     assert packet.context.timestamp_ns == 50_000_000
     assert result["status"]["queued_actions"] == 0
+
+
+def test_expert_label_rpc_is_disabled_by_default():
+    import pytest
+    session = object.__new__(local_session.LocalVisualReachSession)
+    session.enable_expert = False
+    with pytest.raises(ValueError, match="disabled"):
+        session.expert_action({})
