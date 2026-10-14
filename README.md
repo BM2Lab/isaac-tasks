@@ -25,3 +25,6 @@ scripts/list_envs.py checks registration without launching a simulator.
 
 Do not move native hardware drivers here. Migration requires source provenance,
 FK/joint-map, reset, controller/reference and reward parity against franka-rl.
+
+V2 adds a simulation-only local endpoint with validated action chunks and
+episode-aware reset invalidation. See [V2 simulator endpoint](docs/v2_local_sim.md).

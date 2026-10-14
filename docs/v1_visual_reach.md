@@ -131,6 +131,7 @@ This is a bounded integration test, not exhaustive workspace or image-visibility
 qualification. Errors are retained from the terminal physics state before
 Isaac Lab's automatic reset; returned observations belong to the next episode.
 
-Next: V2 local process bridge to the separate learning environment, with explicit
-episode/step/time metadata, queue invalidation on reset and validated mocked
-action chunks before any adapted VLA rollout.
+V2's local process bridge is now implemented with episode/step/time metadata,
+queue invalidation on reset and validated mock action chunks. See
+[V2 endpoint](v2_local_sim.md). Adapted VLA rollouts and dataset collection remain
+subsequent work.

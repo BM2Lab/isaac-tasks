@@ -59,3 +59,9 @@ Keep large assets/generated USDs, checkpoints, videos and experiment logs outsid
 Git; retain lightweight model provenance, configuration and fixtures. Use explicit
 artifact roots with availability/capacity checks, never an implicit repo fallback.
 No live hardware tests or actuation are authorized by simulator tests or CI.
+
+V2's local socket endpoint is simulation-only and single-environment. Preserve
+exact contract handshaking, episode/capture identity, per-execution expiry checks,
+reset queue invalidation and private socket lifecycle. Waiting for a client must
+not advance physics. Never import the learning/ML stack to run the endpoint;
+see `docs/v2_local_sim.md` for protocol and verification.
