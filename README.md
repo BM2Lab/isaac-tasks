@@ -31,3 +31,6 @@ episode-aware reset invalidation. See [V2 simulator endpoint](docs/v2_local_sim.
 
 V3 adds an opt-in privileged expert label endpoint; dataset writing/export remains
 in the separate learning process. See [V3 expert endpoint](docs/v3_demonstrations.md).
+
+P0 adds an offline, batched native-LIBERO OSC reference controller and numerical
+parity checks, not a runnable Panda scene yet. See [P0 qualification](docs/p0_libero_osc.md).
