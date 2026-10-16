@@ -78,3 +78,12 @@ gravity-plus-Coriolis bias and separate gripper semantics. Do not replace native
 OSC with the FR3 IK/PD adapter. See `docs/p0_libero_osc.md` and
 `docs/p1_libero_scene.md`; P1 has no qualified policy/camera contract yet. PhysX
 contact and kinetic friction are not exact MuJoCo equivalence.
+
+P2 adds `bridges/libero_session.py` and `visual_env_cfg.py`; see
+`docs/p2_libero_visual.md`. Use the distinct `contracts.libero.LiberoIOSpec`,
+never relabel native controller inputs as FR3 Cartesian meters. Native position
+uses the grip site while orientation uses the right-hand body with its original
+FK quaternion sign. Isaac pixels need one horizontal flip to reach upstream
+LIBERO-processor output; do not flip again in the learning client. Preserve
+paused observation-before-action capture, reset/expiry checks and terminal state.
+P2 has no grasp/place success predicate or learned-policy qualification.

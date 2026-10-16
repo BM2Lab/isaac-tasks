@@ -27,6 +27,10 @@ diagnostic joint position/velocity (18D), not native 8D state and images.
 Camera/image matching, success predicate, scripted grasp/placement and pretrained
 policy bridging remain for the next gate.
 
+P2 now implements camera geometry and the neutral-action local bridge; see
+[P2 visual contract](p2_libero_visual.md). Grasp/place and learned-policy success
+are still unqualified.
+
 ## Conventions and approximations
 
 - Physics 500 Hz, policy actions 20 Hz. First six normalized inputs retain P0

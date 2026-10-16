@@ -37,5 +37,9 @@ parity checks, not a runnable Panda scene yet. See [P0 qualification](docs/p0_li
 
 P1 adds the imported native Panda/soup/basket manager-based qualification scene,
 its OSC/gripper action adapter, and reference checks. See
-[P1 setup and limitations](docs/p1_libero_scene.md). Camera/policy bridging and
-a registered VLA evaluation task are not implemented yet.
+[P1 setup and limitations](docs/p1_libero_scene.md).
+
+P2 adds native 8D EE/gripper features, two calibrated RGB views and a paused local
+endpoint with an isolated learning client. See [P2 visual bridge](docs/p2_libero_visual.md).
+Learned rollout, task-success qualification and a registered VLA benchmark remain
+separate work; matching camera geometry does not imply pixel-identical rendering.

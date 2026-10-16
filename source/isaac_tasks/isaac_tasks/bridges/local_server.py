@@ -45,7 +45,8 @@ def serve(session, socket_path, idle_timeout_s=60, max_requests=1000):
                             seen_ids.add(identity)
                             op, payload = request["op"], request["payload"]
                             if op == "hello":
-                                if greeted or set(payload) != {"contract"} or PolicyIOSpec.from_dict(payload["contract"]) != session.spec:
+                                parser = getattr(type(session.spec), "from_dict", PolicyIOSpec.from_dict)
+                                if greeted or set(payload) != {"contract"} or parser(payload["contract"]) != session.spec:
                                     raise ValueError("Handshake contract mismatch or duplicate handshake")
                                 greeted = True
                                 result = {"contract": session.spec.to_dict(), "status": session.status(), "receipt": session.receipt()}

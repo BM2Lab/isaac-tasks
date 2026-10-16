@@ -14,6 +14,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reference-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--native-visuals", action="store_true", help="P2: source textures and native visual-group visibility")
     AppLauncher.add_app_launcher_args(parser)
     args = parser.parse_args()
     output = args.output_dir.expanduser().resolve()
@@ -55,10 +56,15 @@ def main():
                     mass.CreateMassAttr(1.)
                     mass.CreateDiagonalInertiaAttr(Gf.Vec3f(.001))
             stage.GetRootLayer().Save()
+            if args.native_visuals:
+                from isaac_tasks.assets.panda.libero_visual_assets import repair_visuals
+                component["visual_repairs"] = repair_visuals(stage, output/component["xml"])
+                stage.GetRootLayer().Save()
             component["usd"] = str(Path(result.usd_path).relative_to(output))
             component["usd_sha256"] = digest(result.usd_path)
             print(name, result.usd_path, flush=True)
         manifest["conversion"] = {"self_collision": True, "collision_from_visuals": False,
+            "native_visuals": args.native_visuals,
             "source_sha256": digest(__file__),
             "run_asset_transformer": False, "run_multi_physics_conversion": True,
             "massless_leaf_frames": "omitted; TCP reconstructed from native receipt",
