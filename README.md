@@ -34,3 +34,8 @@ in the separate learning process. See [V3 expert endpoint](docs/v3_demonstration
 
 P0 adds an offline, batched native-LIBERO OSC reference controller and numerical
 parity checks, not a runnable Panda scene yet. See [P0 qualification](docs/p0_libero_osc.md).
+
+P1 adds the imported native Panda/soup/basket manager-based qualification scene,
+its OSC/gripper action adapter, and reference checks. See
+[P1 setup and limitations](docs/p1_libero_scene.md). Camera/policy bridging and
+a registered VLA evaluation task are not implemented yet.

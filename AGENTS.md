@@ -70,3 +70,11 @@ V3's privileged expert label RPC must remain opt-in and tagged separately from
 policy observations. It generates labels only; execution still uses the normal
 validated queue. Dataset buffering/export belongs in learning, never in the
 simulator's stepping loop. See `docs/v3_demonstrations.md`.
+
+P0/P1 native LIBERO porting uses `controllers/libero_osc*.py` and the unregistered
+`manager_based/libero_object` scene factory. Preserve pinned-reference receipts,
+native-world TCP/Jacobian conventions, armature in the queried mass matrix,
+gravity-plus-Coriolis bias and separate gripper semantics. Do not replace native
+OSC with the FR3 IK/PD adapter. See `docs/p0_libero_osc.md` and
+`docs/p1_libero_scene.md`; P1 has no qualified policy/camera contract yet. PhysX
+contact and kinetic friction are not exact MuJoCo equivalence.

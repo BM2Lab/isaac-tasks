@@ -1,1 +1,1 @@
-"""controllers. Scaffold only; no Gym environments or controller implementations yet."""
+"""Reusable simulation controllers; import implementations explicitly."""
